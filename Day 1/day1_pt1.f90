@@ -30,7 +30,6 @@ program main
         integer :: num_two
         character :: curr
 
-
         num_one = -1
         num_two = -1
 
