@@ -4,20 +4,19 @@ program main
     integer :: ios = 0
     character(len=200) :: buff
     integer :: i = 0
-    integer :: t(10)
+    integer :: t(1000)
 
     open(unit=10, file="day1.txt", status="old")
 
-    ! do while (ios .eq. 0)    
-    do i = 1,10
-        ! i = i + 1
+    do while (ios .eq. 0)    
+        i = i + 1
         read(10, *, IOSTAT = ios) buff
         t(i) = with_words(len(trim(buff)), trim(buff))
     end do
 
     close(10)
 
-    print *, t
+    print *, sum(t)
 
     contains 
 
@@ -46,11 +45,11 @@ program main
                 else
                     num_two = ICHAR(curr) - ICHAR('0')
                 end if
-            else if (get_word(num, pass, i) .gt. -1) then
+            else if (get_word(num, pass, i) .ne. -1) then
                 if (num_one .eq. -1) then
-                    num_one = ICHAR(curr) - ICHAR('0')
+                    num_one = get_word(num, pass, i)
                 else
-                    num_two = ICHAR(curr) - ICHAR('0')
+                    num_two = get_word(num, pass, i)
                 end if
             end if
         end do
@@ -70,42 +69,33 @@ program main
         integer, intent(in) :: ind
         integer :: dif
         dif = num - ind + 1
+        word_num = -1
 
         ! one two three four five six seven eight nine zero
         !  3   3    5    4    4    3    5     5    4    4 
         if (dif .gt. 1) then
             if (str(ind:ind+2) .eq. "one") then
                     word_num = 1
-                    print *, str(ind:ind+2)
             else if (str(ind:ind+2) .eq. "two") then
                     word_num = 2
-                    print *, str(ind:ind+2)
             else if (str(ind:ind+2) .eq. "six") then
                     word_num = 6
-                    print *, str(ind:ind+2)
             else if (dif .gt. 3) then
                 if (str(ind:ind+3) .eq. "zero")then
                     word_num = 0
-                    print *, str(ind:ind+3)
                 else if (str(ind:ind+3) .eq. "four") then
                     word_num = 4
-                    print *, str(ind:ind+3)
                 else if (str(ind:ind+3) .eq. "five")then
                     word_num = 5
-                    print *, str(ind:ind+3)
                 else if (str(ind:ind+3) .eq. "nine")then
                     word_num = 9
-                    print *, str(ind:ind+3)
                 else if (dif .gt. 4) then
                     if (str(ind:ind+4) .eq. "three") then
                         word_num = 3
-                        print *, str(ind:ind+4)
                     else if (str(ind:ind+4) .eq. "seven") then
                         word_num = 7
-                        print *, str(ind:ind+4)
                     else if (str(ind:ind+4) .eq. "eight") then
                         word_num = 8
-                        print *, str(ind:ind+4)
                     end if
                 end if
             else 
