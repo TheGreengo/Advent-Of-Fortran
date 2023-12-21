@@ -14,7 +14,7 @@ program main
     do while (ios .eq. 0)
         i = i + 1
         read(10, '(A)', IOSTAT=ios) buff
-        print *, i, buff
+        print *, len(trim(buff))
     end do
 
     close(10)
