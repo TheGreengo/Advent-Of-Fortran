@@ -6,7 +6,11 @@ program main
     integer :: i = 0
     character(len=200) :: buff
     character :: mat(SIZE, SIZE)
+    integer :: places(5000, 3)
 
+    places(:, 1) = -1 
+    places(:, 2) = -1 
+    places(:, 3) = -1 
     open(unit=10, file="day3.txt", status="old")
 
     do i = 1,140
@@ -28,6 +32,9 @@ program main
             mat(num, j) = str(j)
         end do
     end subroutine LoadMatrix 
+
+    subroutine LoadNums
+    end subroutine LoadNums
 
     logical function GetValid(x, y, size) result(thang)
         integer, intent(in) :: x
