@@ -12,7 +12,7 @@ program main
 
     do i = 1,100
         read(10, '(A)', IOSTAT=ios) buff
-        if (GetValid(len(trim(buff)), trim(buff))) then
+        if (.not. GetValid(len(trim(buff)), trim(buff))) then
             ids(i) = 0
         end if
     end do
@@ -23,9 +23,6 @@ program main
 
     contains 
 
-    ! So here's the skinny,
-    ! we check to see if it's valid
-    ! if it's valid, we check for a number,
     ! if there's a number, we check if the next thing is a number
     ! if not, then we keep going until we hit a number
     ! if the next is, we create a number
@@ -36,27 +33,45 @@ program main
         integer, intent(in) :: num
         character, intent(in) :: str(num)
 
+        integer :: nam = 0
         integer :: MaxRed = 12
         integer :: MaxGreen = 13
         integer :: MaxBlue = 14
-        logical :: Reached = .false.
-        integer :: j = 0
+        logical :: Reached
+        integer :: j
 
         thing = .true.
+        Reached = .false.
+        j = 0
 
         do while (j .lt. num)
-            if (str(i) .eq. ':') then
+            if (str(j) .eq. ':') then
                 Reached = .true.
             end if
 
-            print *, MaxRed
-            print *, MaxGreen
-            print *, MaxBlue
-            print *, j
+            if (Reached) then
+                if ((str(j) .le. '9') .and. (str(j) .ge. '0')) then
+                    if ((str(j+1) .le. '9') .and. (str(j+1) .ge. '0')) then
+                        nam = ((ICHAR(str(j)) - ICHAR('0')) * 10) + (ICHAR(str(j+1)) - ICHAR('0'))
+                        if (str(j+3) .eq. 'r') then
+                            if (nam .gt. MaxRed) then
+                                thing = .false.
+                            end if
+                        else if (str(j+3) .eq. 'b') then
+                            if (nam .gt. MaxBlue) then
+                                thing = .false.
+                            end if
+                        else if (str(j+3) .eq. 'g') then 
+                            if (nam .gt. MaxGreen) then
+                                thing = .false.
+                            end if
+                        end if
+                    end if
+                end if
+            end if
+
             j = j + 1
         end do
 
-        print *, str
-        thing = .false.
     end function GetValid
 end program main
