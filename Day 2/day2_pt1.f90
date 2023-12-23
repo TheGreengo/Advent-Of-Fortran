@@ -10,23 +10,28 @@ program main
 
     open(unit=10, file="day2.txt", status="old")
 
-    i = 0
-    do while (ios .eq. 0)
-        i = i + 1
+    do i = 1,100
         read(10, '(A)', IOSTAT=ios) buff
-        print *, len(trim(buff))
+        if (GetValid(len(trim(buff)), trim(buff))) then
+            ids(i) = 0
+        end if
     end do
 
     close(10)
 
-    ! So I think that this here is the plan. We loop through the file,
-    ! for each line, we check if the numbers are valid
-    ! if they aren't, we set that index of ids to 0
-    ! we return the sum of ids
     print *, sum(ids)
 
     contains 
 
+    ! So here's the skinny,
+    ! we check to see if it's valid
+    ! if it's valid, we check for a number,
+    ! if there's a number, we check if the next thing is a number
+    ! if not, then we keep going until we hit a number
+    ! if the next is, we create a number
+    ! we then get the first letter of the next num
+    ! and then we check to see if it's valid
+    ! if not we end the loop and ser thing=.false.
     logical function GetValid(num, str) result(thing)
         integer, intent(in) :: num
         character, intent(in) :: str(num)
@@ -34,12 +39,21 @@ program main
         integer :: MaxRed = 12
         integer :: MaxGreen = 13
         integer :: MaxBlue = 14
+        logical :: Reached = .false.
+        integer :: j = 0
 
-        do i = 1,num
+        thing = .true.
+
+        do while (j .lt. num)
+            if (str(i) .eq. ':') then
+                Reached = .true.
+            end if
+
             print *, MaxRed
             print *, MaxGreen
             print *, MaxBlue
-            print *, I
+            print *, j
+            j = j + 1
         end do
 
         print *, str
